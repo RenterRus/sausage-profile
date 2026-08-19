@@ -1,0 +1,42 @@
+syntax = "proto3";
+package auth.v1;
+
+option go_package = "github.com/RenterRus/sausage-profile/auth/pb/auth/v1;authpb";
+
+
+message RegisterRequest {
+  string login = 1;
+}
+
+message RegisterResponse{
+  string message = 1;
+}
+
+message AcceptRequest {
+  string login = 1;
+  string otp_code = 2;
+}
+
+message AcceptResponse{
+  string message = 1;
+}
+
+
+service AuthService {
+
+  
+    rpc Register(RegisterRequest) returns (RegisterResponse);
+    
+    rpc Accept(AcceptRequest) returns (AcceptResponse);
+
+  // Switch to otp
+
+  // Auth
+
+  // RefreshToken
+
+  // RevokeSession
+
+  // ValidateToken
+  
+}

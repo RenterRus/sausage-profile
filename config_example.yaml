@@ -1,0 +1,13 @@
+grpc:
+    host: "127.0.0.1"
+    port: 8888
+    enable: true
+
+pathtodb: "./db"
+namedb: "links.db"
+workPath: "/home/user"
+
+cache:
+    host: "127.0.0.1"
+    port: 9999
+    enable: true

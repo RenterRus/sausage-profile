@@ -1,0 +1,75 @@
+package psql
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/RenterRus/sausage-profile/internal/repo/psql/db"
+)
+
+// Confirmed implements db.Querier.
+func (u *UserRepo) Confirmed(ctx context.Context, login *string) error {
+	if login == nil || *login == "" {
+		return fmt.Errorf("Confirmed: %w", ErrParametrNoFound)
+	}
+
+	if err := u.Queries.Confirmed(ctx, login); err != nil {
+		return fmt.Errorf("Confirmed.Confirmed: %w", err)
+	}
+
+	return nil
+}
+
+// Hash implements db.Querier.
+func (u *UserRepo) Hash(ctx context.Context, login *string) (string, error) {
+	if login == nil || *login == "" {
+		return "", fmt.Errorf("Hash: %w", ErrParametrNoFound)
+	}
+
+	hash, err := u.Queries.Hash(ctx, login)
+	if err != nil {
+		return "", fmt.Errorf("Hash.Hash: %w", err)
+	}
+
+	return hash, nil
+}
+
+// IsConfirmed implements db.Querier.
+func (u *UserRepo) IsConfirmed(ctx context.Context, login *string) (*bool, error) {
+	if login == nil || *login == "" {
+		return nil, fmt.Errorf("IsConfirmed: %w", ErrParametrNoFound)
+	}
+
+	isConfirmed, err := u.Queries.IsConfirmed(ctx, login)
+	if err != nil {
+		return nil, fmt.Errorf("IsConfirmed.IsConfirmed: %w", err)
+	}
+
+	return isConfirmed, nil
+}
+
+// Register implements db.Querier.
+func (u *UserRepo) Register(ctx context.Context, arg db.RegisterParams) (string, error) {
+	if arg.Login == nil || *arg.Login == "" {
+		return "", fmt.Errorf("Register(login): %w", ErrParametrNoFound)
+	}
+
+	if arg.Hash == nil || *arg.Hash == "" {
+		return "", fmt.Errorf("Register(hash): %w", ErrParametrNoFound)
+	}
+
+	if arg.Link == nil || *arg.Link == "" {
+		return "", fmt.Errorf("Register(link): %w", ErrParametrNoFound)
+	}
+
+	url, err := u.Queries.Register(ctx, db.RegisterParams{
+		Login: arg.Login,
+		Hash:  arg.Hash,
+		Link:  arg.Link,
+	})
+	if err != nil {
+		return "", fmt.Errorf("Register.Register: %w", err)
+	}
+
+	return url, nil
+}
