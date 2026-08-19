@@ -13,19 +13,21 @@ import (
 
 type otpManager struct {
 	// Ключ должен быть строго 16, 24 или 32 байта (для AES-128, 192 или 256)
-	key []byte
+	key    []byte
+	issuer string
 }
 
-func NewOTPManager(key []byte) OTP {
+func NewOTPManager(key []byte, issuer string) OTP {
 	return &otpManager{
-		key: key,
+		key:    key,
+		issuer: issuer,
 	}
 }
 
 func (o *otpManager) GenerateHash(username string) (string, string, error) {
 	// Генерируем ключ
 	key, err := totp.Generate(totp.GenerateOpts{
-		Issuer:      "MyAwesomeService",
+		Issuer:      o.issuer,
 		AccountName: username,
 	})
 	if err != nil {
@@ -35,9 +37,6 @@ func (o *otpManager) GenerateHash(username string) (string, string, error) {
 	// Secret() — строка для сохранения в БД (в зашифрованном виде!)
 	secretKey := key.Secret()
 
-	fmt.Println("secretKey")
-	fmt.Println(secretKey)
-
 	// URL для построения QR-кода, который сканирует пользователь в приложении
 	url := key.URL()
 
@@ -46,8 +45,7 @@ func (o *otpManager) GenerateHash(username string) (string, string, error) {
 
 func (o *otpManager) ValidateCode(passcode, secretKey string) bool {
 	// Валидирует код по текущему времени сервера
-	valid := totp.Validate(passcode, secretKey)
-	return valid
+	return totp.Validate(passcode, secretKey)
 }
 
 // Encrypt шифрует строку и возвращает Base64-код
