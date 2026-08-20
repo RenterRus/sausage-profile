@@ -9,7 +9,7 @@ message RegisterRequest {
 }
 
 message RegisterResponse{
-  string message = 1;
+  string url = 1;
 }
 
 message AcceptRequest {
@@ -18,7 +18,7 @@ message AcceptRequest {
 }
 
 message AcceptResponse{
-  string message = 1;
+  string status = 1;
 }
 
 
@@ -27,7 +27,7 @@ service AuthService {
   
     rpc Register(RegisterRequest) returns (RegisterResponse);
     
-    rpc Accept(AcceptRequest) returns (AcceptResponse);
+    rpc Confirm(AcceptRequest) returns (AcceptResponse);
 
   // Switch to otp
 

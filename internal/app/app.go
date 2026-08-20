@@ -5,8 +5,6 @@ import (
 	"log"
 	"net"
 
-	v1 "github.com/RenterRus/sausage-profile/docs/proto/v1"
-	protoServe "github.com/RenterRus/sausage-profile/internal/controller/grpc"
 	"github.com/sourcegraph/conc/pool"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -53,7 +51,7 @@ func (a *App) Run() error {
 			s.Stop()
 		}()
 
-		v1.RegisterAuthServiceServer(s, protoServe.NewManager())
+		//v1.RegisterAuthServiceServer(s, protoServe.NewManager())
 
 		log.Printf("gRPC server listening on %s", a.grpcAddr)
 		if err := s.Serve(lis); err != nil {

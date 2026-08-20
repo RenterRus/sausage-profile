@@ -67,7 +67,7 @@ func (x *RegisterRequest) GetLogin() string {
 
 type RegisterResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -102,9 +102,9 @@ func (*RegisterResponse) Descriptor() ([]byte, []int) {
 	return file_docs_proto_v1_auth_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *RegisterResponse) GetMessage() string {
+func (x *RegisterResponse) GetUrl() string {
 	if x != nil {
-		return x.Message
+		return x.Url
 	}
 	return ""
 }
@@ -163,7 +163,7 @@ func (x *AcceptRequest) GetOtpCode() string {
 
 type AcceptResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	Status        string                 `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -198,9 +198,9 @@ func (*AcceptResponse) Descriptor() ([]byte, []int) {
 	return file_docs_proto_v1_auth_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *AcceptResponse) GetMessage() string {
+func (x *AcceptResponse) GetStatus() string {
 	if x != nil {
-		return x.Message
+		return x.Status
 	}
 	return ""
 }
@@ -211,17 +211,17 @@ const file_docs_proto_v1_auth_proto_rawDesc = "" +
 	"\n" +
 	"\x18docs/proto/v1/auth.proto\x12\aauth.v1\"'\n" +
 	"\x0fRegisterRequest\x12\x14\n" +
-	"\x05login\x18\x01 \x01(\tR\x05login\",\n" +
-	"\x10RegisterResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage\"@\n" +
+	"\x05login\x18\x01 \x01(\tR\x05login\"$\n" +
+	"\x10RegisterResponse\x12\x10\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\"@\n" +
 	"\rAcceptRequest\x12\x14\n" +
 	"\x05login\x18\x01 \x01(\tR\x05login\x12\x19\n" +
-	"\botp_code\x18\x02 \x01(\tR\aotpCode\"*\n" +
-	"\x0eAcceptResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2\x89\x01\n" +
+	"\botp_code\x18\x02 \x01(\tR\aotpCode\"(\n" +
+	"\x0eAcceptResponse\x12\x16\n" +
+	"\x06status\x18\x01 \x01(\tR\x06status2\x8a\x01\n" +
 	"\vAuthService\x12?\n" +
-	"\bRegister\x12\x18.auth.v1.RegisterRequest\x1a\x19.auth.v1.RegisterResponse\x129\n" +
-	"\x06Accept\x12\x16.auth.v1.AcceptRequest\x1a\x17.auth.v1.AcceptResponseB=Z;github.com/RenterRus/sausage-profile/auth/pb/auth/v1;authpbb\x06proto3"
+	"\bRegister\x12\x18.auth.v1.RegisterRequest\x1a\x19.auth.v1.RegisterResponse\x12:\n" +
+	"\aConfirm\x12\x16.auth.v1.AcceptRequest\x1a\x17.auth.v1.AcceptResponseB=Z;github.com/RenterRus/sausage-profile/auth/pb/auth/v1;authpbb\x06proto3"
 
 var (
 	file_docs_proto_v1_auth_proto_rawDescOnce sync.Once
@@ -244,9 +244,9 @@ var file_docs_proto_v1_auth_proto_goTypes = []any{
 }
 var file_docs_proto_v1_auth_proto_depIdxs = []int32{
 	0, // 0: auth.v1.AuthService.Register:input_type -> auth.v1.RegisterRequest
-	2, // 1: auth.v1.AuthService.Accept:input_type -> auth.v1.AcceptRequest
+	2, // 1: auth.v1.AuthService.Confirm:input_type -> auth.v1.AcceptRequest
 	1, // 2: auth.v1.AuthService.Register:output_type -> auth.v1.RegisterResponse
-	3, // 3: auth.v1.AuthService.Accept:output_type -> auth.v1.AcceptResponse
+	3, // 3: auth.v1.AuthService.Confirm:output_type -> auth.v1.AcceptResponse
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
