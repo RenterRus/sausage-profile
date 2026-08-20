@@ -5,13 +5,18 @@ import (
 	"log"
 	"net"
 
+	v1 "github.com/RenterRus/sausage-profile/docs/proto/v1"
+	protoServe "github.com/RenterRus/sausage-profile/internal/controller/grpc"
+	"github.com/RenterRus/sausage-profile/internal/repo/otp"
+	"github.com/RenterRus/sausage-profile/internal/repo/psql"
+	"github.com/RenterRus/sausage-profile/internal/usecase"
 	"github.com/sourcegraph/conc/pool"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
 type App struct {
-	grpcAddr string
+	conf *Config
 }
 
 func NewApp(configPath string) (*App, error) {
@@ -27,10 +32,8 @@ func NewApp(configPath string) (*App, error) {
 		return nil, fmt.Errorf("ReadConfig: %w", err)
 	}
 
-	_ = conf
-
 	return &App{
-		grpcAddr: fmt.Sprintf("%s:%d", conf.GRPC.Host, conf.GRPC.Port),
+		conf: conf,
 	}, nil
 }
 
@@ -39,7 +42,7 @@ func (a *App) Run() error {
 
 	// grpc
 	p.Go(func() error {
-		lis, err := net.Listen("tcp", a.grpcAddr)
+		lis, err := net.Listen("tcp", fmt.Sprintf("%s:%d", a.conf.GRPC.Host, a.conf.GRPC.Port))
 		if err != nil {
 			return fmt.Errorf("failed to listen: %v", err)
 		}
@@ -51,9 +54,20 @@ func (a *App) Run() error {
 			s.Stop()
 		}()
 
-		//v1.RegisterAuthServiceServer(s, protoServe.NewManager())
+		users, err := psql.NewDBManager(fmt.Sprintf("%s://%s:%s@%s:%d/%s",
+			a.conf.PSQL.Provider, a.conf.PSQL.Username, a.conf.PSQL.Password,
+			a.conf.PSQL.Host, a.conf.PSQL.Port, a.conf.PSQL.DBName))
+		if err != nil {
+			return fmt.Errorf("Run.NewDBManager: %w", err)
+		}
 
-		log.Printf("gRPC server listening on %s", a.grpcAddr)
+		v1.RegisterAuthServiceServer(s, protoServe.NewManager(usecase.NewRegisterManager(
+			otp.NewOTPManager(a.conf.SecretKey, a.conf.Issuer),
+			users,
+		)))
+
+		log.Printf("gRPC server listening on %s", fmt.Sprintf("%s:%d", a.conf.GRPC.Host, a.conf.GRPC.Port))
+
 		if err := s.Serve(lis); err != nil {
 			log.Fatalf("failed to serve: %v", err)
 		}

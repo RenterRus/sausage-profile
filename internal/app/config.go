@@ -14,14 +14,24 @@ type Server struct {
 	Enable bool   `validate:"required"`
 }
 
+// "postgres://username:password@localhost:5432/database_name
+type DB struct {
+	Provider string `validate:"required"`
+	Username string `validate:"required"`
+	Password string `validate:"required"`
+	Host     string `validate:"required"`
+	Port     int    `validate:"required"`
+	DBName   string `validate:"required"`
+}
+
 type Config struct {
 	GRPC Server `validate:"required"`
 
-	PathToDB string `validate:"required"`
-	NameDB   string `validate:"required"`
-	WorkPath string `validate:"required"`
+	PSQL DB
 
-	Cache Server `validate:"required"`
+	// Ключ должен быть строго 16, 24 или 32 байта (для AES-128, 192 или 256)
+	SecretKey []byte `validate:"required,gt=32"`
+	Issuer    string `validate:"required"`
 }
 
 func ReadConfig(path string, fileName string) (*Config, error) {
