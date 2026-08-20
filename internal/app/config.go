@@ -27,10 +27,10 @@ type DB struct {
 type Config struct {
 	GRPC Server `validate:"required"`
 
-	PSQL DB
+	PSQL DB `validate:"required"`
 
 	// Ключ должен быть строго 16, 24 или 32 байта (для AES-128, 192 или 256)
-	SecretKey []byte `validate:"required,gt=32"`
+	SecretKey string `validate:"required,gte=32"`
 	Issuer    string `validate:"required"`
 }
 
@@ -50,6 +50,9 @@ func ReadConfig(path string, fileName string) (*Config, error) {
 	}
 
 	res := &Config{}
+	fmt.Println("B")
+	fmt.Println(string(b))
+	fmt.Println("B")
 	err = yaml.Unmarshal(b, res)
 	if err != nil {
 		return nil, fmt.Errorf("ReadConfig (Unmarshal): %w", err)

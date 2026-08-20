@@ -49,7 +49,7 @@ func (r *register) Confirmed(ctx context.Context, login, code string) error {
 		return fmt.Errorf("Confirmed.ValidateCode: %w", err)
 	}
 
-	if isValid {
+	if !isValid {
 		return fmt.Errorf("Confirmed.ValidateCode(invalid): %w", entity.ErrCodeInvalid)
 	}
 

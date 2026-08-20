@@ -15,6 +15,8 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
+const secretSize = 32
+
 type App struct {
 	conf *Config
 }
@@ -62,7 +64,7 @@ func (a *App) Run() error {
 		}
 
 		v1.RegisterAuthServiceServer(s, protoServe.NewManager(usecase.NewRegisterManager(
-			otp.NewOTPManager(a.conf.SecretKey, a.conf.Issuer),
+			otp.NewOTPManager([]byte(a.conf.SecretKey)[:secretSize], a.conf.Issuer),
 			users,
 		)))
 

@@ -3,11 +3,14 @@ grpc:
     port: 8888
     enable: true
 
-pathtodb: "./db"
-namedb: "links.db"
-workPath: "/home/user"
+psql:
+    provider: "postgres"
+    username: "name"
+    password: "pswd"
+    host: "localhost"
+    port: 5432
+    dbname: dbname
 
-cache:
-    host: "127.0.0.1"
-    port: 9999
-    enable: true
+issuer: "sausage"
+secretkey: "32 byte key"
+

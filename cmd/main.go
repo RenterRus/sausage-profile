@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 
 	"github.com/RenterRus/sausage-profile/internal/app"
@@ -15,6 +16,8 @@ func main() {
 		log.Fatal("config flag not found")
 		os.Exit(1)
 	}
+
+	fmt.Println("Path:", *path)
 
 	app, err := app.NewApp(*path)
 	if err != nil {
