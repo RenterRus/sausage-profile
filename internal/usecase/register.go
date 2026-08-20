@@ -6,15 +6,16 @@ import (
 
 	"github.com/RenterRus/sausage-profile/internal/entity"
 	"github.com/RenterRus/sausage-profile/internal/repo/otp"
+	"github.com/RenterRus/sausage-profile/internal/repo/psql"
 	"github.com/RenterRus/sausage-profile/internal/repo/psql/db"
 )
 
 type register struct {
 	otpRepo   otp.OTP
-	usersRepo db.Querier
+	usersRepo psql.UsersRepo
 }
 
-func NewRegisterManager(otpRepo otp.OTP, usersRepo db.Querier) Register {
+func NewRegisterManager(otpRepo otp.OTP, usersRepo psql.UsersRepo) Register {
 	return &register{
 		otpRepo:   otpRepo,
 		usersRepo: usersRepo,
@@ -22,6 +23,15 @@ func NewRegisterManager(otpRepo otp.OTP, usersRepo db.Querier) Register {
 }
 
 func (r *register) Registration(ctx context.Context, login string) (string, error) {
+	userLogin, err := r.usersRepo.IsExist(ctx, &login)
+	if err != nil {
+		return "", fmt.Errorf("Registration.IsExists: %w", err)
+	}
+
+	if userLogin {
+		return "", fmt.Errorf("Registration.IsExists(exists): %w", entity.ErrAlreadyExists)
+	}
+
 	hash, url, err := r.otpRepo.GenerateHash(login)
 	if err != nil {
 		return "", nil

@@ -36,17 +36,17 @@ func (u *UserRepo) Hash(ctx context.Context, login *string) (string, error) {
 }
 
 // IsConfirmed implements db.Querier.
-func (u *UserRepo) IsConfirmed(ctx context.Context, login *string) (*bool, error) {
+func (u *UserRepo) IsExist(ctx context.Context, login *string) (bool, error) {
 	if login == nil || *login == "" {
-		return nil, fmt.Errorf("IsConfirmed: %w", entity.ErrParametrNoFound)
+		return false, fmt.Errorf("IsConfirmed: %w", entity.ErrParametrNoFound)
 	}
 
-	isConfirmed, err := u.Queries.IsConfirmed(ctx, login)
+	userLogin, err := u.Queries.IsExist(ctx, login)
 	if err != nil {
-		return nil, fmt.Errorf("IsConfirmed.IsConfirmed: %w", err)
+		return false, fmt.Errorf("IsConfirmed.IsConfirmed: %w", err)
 	}
 
-	return isConfirmed, nil
+	return userLogin, nil
 }
 
 // Register implements db.Querier.

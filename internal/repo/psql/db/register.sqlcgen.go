@@ -35,18 +35,18 @@ func (q *Queries) Hash(ctx context.Context, login *string) (string, error) {
 	return otp_hash, err
 }
 
-const isConfirmed = `-- name: IsConfirmed :one
-select confirmed from users where user_login = $1
+const isExist = `-- name: IsExist :one
+select exists(select 1 from users WHERE user_login = $1)
 `
 
-// IsConfirmed
+// IsExist
 //
-//	select confirmed from users where user_login = $1
-func (q *Queries) IsConfirmed(ctx context.Context, login *string) (*bool, error) {
-	row := q.db.QueryRow(ctx, isConfirmed, login)
-	var confirmed *bool
-	err := row.Scan(&confirmed)
-	return confirmed, err
+//	select exists(select 1 from users WHERE user_login = $1)
+func (q *Queries) IsExist(ctx context.Context, login *string) (bool, error) {
+	row := q.db.QueryRow(ctx, isExist, login)
+	var exists bool
+	err := row.Scan(&exists)
+	return exists, err
 }
 
 const register = `-- name: Register :exec

@@ -17,10 +17,10 @@ type Querier interface {
 	//
 	//  select otp_hash from users where user_login = $1
 	Hash(ctx context.Context, login *string) (string, error)
-	//IsConfirmed
+	//IsExist
 	//
-	//  select confirmed from users where user_login = $1
-	IsConfirmed(ctx context.Context, login *string) (*bool, error)
+	//  select exists(select 1 from users WHERE user_login = $1)
+	IsExist(ctx context.Context, login *string) (bool, error)
 	//Register
 	//
 	//  insert into users (user_login, uuid, otp_hash, otp_link, created_at, last_sign_up_at) values ($1, gen_random_uuid(), $2, $3, now(), now())

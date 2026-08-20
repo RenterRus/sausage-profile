@@ -12,7 +12,7 @@ type UserRepo struct {
 	Queries *db.Queries
 }
 
-func NewDBManager(conn string) (db.Querier, error) {
+func NewDBManager(conn string) (UsersRepo, error) {
 	pgx, err := pgxpool.New(context.Background(), conn)
 	if err != nil {
 		return nil, fmt.Errorf("NewDBManager.New: %w", err)

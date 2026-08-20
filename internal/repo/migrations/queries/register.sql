@@ -4,8 +4,8 @@ insert into users (user_login, uuid, otp_hash, otp_link, created_at, last_sign_u
 -- name: Confirmed :exec
 update users set confirmed = true where user_login = sqlc.narg('login');
 
--- name: IsConfirmed :one
-select confirmed from users where user_login = sqlc.narg('login');
+-- name: IsExist :one
+select exists(select 1 from users WHERE user_login = sqlc.narg('login'));
 
 -- name: Hash :one
 select otp_hash from users where user_login = sqlc.narg('login');
