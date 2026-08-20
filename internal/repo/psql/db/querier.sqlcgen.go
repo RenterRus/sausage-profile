@@ -23,8 +23,8 @@ type Querier interface {
 	IsConfirmed(ctx context.Context, login *string) (*bool, error)
 	//Register
 	//
-	//  insert into users (user_login, uuid, otp_hash, otp_link, created_at) values ($1, gen_random_uuid(), $2, $3, now()) returning otp_hash
-	Register(ctx context.Context, arg RegisterParams) (string, error)
+	//  insert into users (user_login, uuid, otp_hash, otp_link, created_at, last_sign_up_at) values ($1, gen_random_uuid(), $2, $3, now(), now())
+	Register(ctx context.Context, arg RegisterParams) error
 }
 
 var _ Querier = (*Queries)(nil)

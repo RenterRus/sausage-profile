@@ -49,8 +49,8 @@ func (q *Queries) IsConfirmed(ctx context.Context, login *string) (*bool, error)
 	return confirmed, err
 }
 
-const register = `-- name: Register :one
-insert into users (user_login, uuid, otp_hash, otp_link, created_at) values ($1, gen_random_uuid(), $2, $3, now()) returning otp_hash
+const register = `-- name: Register :exec
+insert into users (user_login, uuid, otp_hash, otp_link, created_at, last_sign_up_at) values ($1, gen_random_uuid(), $2, $3, now(), now())
 `
 
 type RegisterParams struct {
@@ -61,10 +61,8 @@ type RegisterParams struct {
 
 // Register
 //
-//	insert into users (user_login, uuid, otp_hash, otp_link, created_at) values ($1, gen_random_uuid(), $2, $3, now()) returning otp_hash
-func (q *Queries) Register(ctx context.Context, arg RegisterParams) (string, error) {
-	row := q.db.QueryRow(ctx, register, arg.Login, arg.Hash, arg.Link)
-	var otp_hash string
-	err := row.Scan(&otp_hash)
-	return otp_hash, err
+//	insert into users (user_login, uuid, otp_hash, otp_link, created_at, last_sign_up_at) values ($1, gen_random_uuid(), $2, $3, now(), now())
+func (q *Queries) Register(ctx context.Context, arg RegisterParams) error {
+	_, err := q.db.Exec(ctx, register, arg.Login, arg.Hash, arg.Link)
+	return err
 }

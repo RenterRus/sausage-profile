@@ -1,5 +1,5 @@
--- name: Register :one
-insert into users (user_login, uuid, otp_hash, otp_link, created_at) values (sqlc.narg('login'), gen_random_uuid(), sqlc.narg('hash'), sqlc.narg('link'), now()) returning otp_hash;
+-- name: Register :exec
+insert into users (user_login, uuid, otp_hash, otp_link, created_at, last_sign_up_at) values (sqlc.narg('login'), gen_random_uuid(), sqlc.narg('hash'), sqlc.narg('link'), now(), now());
 
 -- name: Confirmed :exec
 update users set confirmed = true where user_login = sqlc.narg('login');

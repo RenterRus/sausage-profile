@@ -5,8 +5,9 @@ create table if not exists users (
     otp_hash text not null,
     otp_link text not null,
     
+    confirmed boolean default false,    
     created_at timestamp default now(),
-    confirmed boolean default false    
+    last_sign_up_at timestamp default now()
 )
 
 

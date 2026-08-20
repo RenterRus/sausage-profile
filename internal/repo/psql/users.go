@@ -4,13 +4,14 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/RenterRus/sausage-profile/internal/entity"
 	"github.com/RenterRus/sausage-profile/internal/repo/psql/db"
 )
 
 // Confirmed implements db.Querier.
 func (u *UserRepo) Confirmed(ctx context.Context, login *string) error {
 	if login == nil || *login == "" {
-		return fmt.Errorf("Confirmed: %w", ErrParametrNoFound)
+		return fmt.Errorf("Confirmed: %w", entity.ErrParametrNoFound)
 	}
 
 	if err := u.Queries.Confirmed(ctx, login); err != nil {
@@ -23,7 +24,7 @@ func (u *UserRepo) Confirmed(ctx context.Context, login *string) error {
 // Hash implements db.Querier.
 func (u *UserRepo) Hash(ctx context.Context, login *string) (string, error) {
 	if login == nil || *login == "" {
-		return "", fmt.Errorf("Hash: %w", ErrParametrNoFound)
+		return "", fmt.Errorf("Hash: %w", entity.ErrParametrNoFound)
 	}
 
 	hash, err := u.Queries.Hash(ctx, login)
@@ -37,7 +38,7 @@ func (u *UserRepo) Hash(ctx context.Context, login *string) (string, error) {
 // IsConfirmed implements db.Querier.
 func (u *UserRepo) IsConfirmed(ctx context.Context, login *string) (*bool, error) {
 	if login == nil || *login == "" {
-		return nil, fmt.Errorf("IsConfirmed: %w", ErrParametrNoFound)
+		return nil, fmt.Errorf("IsConfirmed: %w", entity.ErrParametrNoFound)
 	}
 
 	isConfirmed, err := u.Queries.IsConfirmed(ctx, login)
@@ -49,27 +50,27 @@ func (u *UserRepo) IsConfirmed(ctx context.Context, login *string) (*bool, error
 }
 
 // Register implements db.Querier.
-func (u *UserRepo) Register(ctx context.Context, arg db.RegisterParams) (string, error) {
+func (u *UserRepo) Register(ctx context.Context, arg db.RegisterParams) error {
 	if arg.Login == nil || *arg.Login == "" {
-		return "", fmt.Errorf("Register(login): %w", ErrParametrNoFound)
+		return fmt.Errorf("Register(login): %w", entity.ErrParametrNoFound)
 	}
 
 	if arg.Hash == nil || *arg.Hash == "" {
-		return "", fmt.Errorf("Register(hash): %w", ErrParametrNoFound)
+		return fmt.Errorf("Register(hash): %w", entity.ErrParametrNoFound)
 	}
 
 	if arg.Link == nil || *arg.Link == "" {
-		return "", fmt.Errorf("Register(link): %w", ErrParametrNoFound)
+		return fmt.Errorf("Register(link): %w", entity.ErrParametrNoFound)
 	}
 
-	url, err := u.Queries.Register(ctx, db.RegisterParams{
+	err := u.Queries.Register(ctx, db.RegisterParams{
 		Login: arg.Login,
 		Hash:  arg.Hash,
 		Link:  arg.Link,
 	})
 	if err != nil {
-		return "", fmt.Errorf("Register.Register: %w", err)
+		return fmt.Errorf("Register.Register: %w", err)
 	}
 
-	return url, nil
+	return nil
 }

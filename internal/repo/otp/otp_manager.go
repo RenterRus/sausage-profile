@@ -35,17 +35,23 @@ func (o *otpManager) GenerateHash(username string) (string, string, error) {
 	}
 
 	// Secret() — строка для сохранения в БД (в зашифрованном виде!)
-	secretKey := key.Secret()
+	secretKey, err := o.encrypt(key.Secret())
+	if err != nil {
+		return "", "", fmt.Errorf("GenerateHash.encrypt: %w", err)
+	}
 
 	// URL для построения QR-кода, который сканирует пользователь в приложении
-	url := key.URL()
-
-	return secretKey, url, nil
+	return secretKey, key.URL(), nil
 }
 
-func (o *otpManager) ValidateCode(passcode, secretKey string) bool {
+func (o *otpManager) ValidateCode(passcode, secretKey string) (bool, error) {
+	secret, err := o.decrypt(secretKey)
+	if err != nil {
+		return false, fmt.Errorf("ValidateCode.decrypt: %w", err)
+	}
+
 	// Валидирует код по текущему времени сервера
-	return totp.Validate(passcode, secretKey)
+	return totp.Validate(passcode, secret), nil
 }
 
 // Encrypt шифрует строку и возвращает Base64-код
