@@ -50,7 +50,7 @@ func (u *UserRepo) IsExist(ctx context.Context, login *string) (bool, error) {
 }
 
 // Register implements db.Querier.
-func (u *UserRepo) Register(ctx context.Context, arg db.RegisterParams) error {
+func (u *UserRepo) Register(ctx context.Context, arg entity.RegisterParams) error {
 	if arg.Login == nil || *arg.Login == "" {
 		return fmt.Errorf("Register(login): %w", entity.ErrParametrNoFound)
 	}

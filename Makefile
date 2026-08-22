@@ -18,7 +18,7 @@ install goose:
 	@go get -u github.com/pressly/goose/v3/cmd/goose@latest
 
 create migration:
-	@go run github.com/pressly/goose/v3/cmd/goose@latest create create_tasks sql -dir migration
+	@go run github.com/pressly/goose/v3/cmd/goose@latest create blacklist sql -dir internal/repo/migrations
 
 
 MIGRATIONS_DIR ?= ./internal/repo/migrations

@@ -7,7 +7,6 @@ import (
 	"github.com/RenterRus/sausage-profile/internal/entity"
 	"github.com/RenterRus/sausage-profile/internal/repo/otp"
 	"github.com/RenterRus/sausage-profile/internal/repo/psql"
-	"github.com/RenterRus/sausage-profile/internal/repo/psql/db"
 )
 
 type register struct {
@@ -37,7 +36,7 @@ func (r *register) Registration(ctx context.Context, login string) (string, erro
 		return "", nil
 	}
 
-	if err := r.usersRepo.Register(ctx, db.RegisterParams{
+	if err := r.usersRepo.Register(ctx, entity.RegisterParams{
 		Login: &login,
 		Hash:  &hash,
 		Link:  &url,

@@ -13,6 +13,13 @@ type Querier interface {
 	//
 	//  update users set confirmed = true where user_login = $1
 	Confirmed(ctx context.Context, login *string) error
+	//GetRefreshToken
+	//
+	//  select refresh_hash,
+	//  (expired_at <= now()) as is_expired,
+	//  exists(select 1 from blacklist_refresh where refresh_hash = (select refresh_hash from users u where u.user_login = $1)) as block
+	//  from users u where u.user_login = $1
+	GetRefreshToken(ctx context.Context, login *string) (GetRefreshTokenRow, error)
 	//Hash
 	//
 	//  select otp_hash from users where user_login = $1
@@ -25,6 +32,17 @@ type Querier interface {
 	//
 	//  insert into users (user_login, uuid, otp_hash, otp_link, created_at, last_sign_up_at) values ($1, gen_random_uuid(), $2, $3, now(), now())
 	Register(ctx context.Context, arg RegisterParams) error
+	//SetBlockRefresh
+	//
+	//  insert into blacklist_refresh (refresh_hash) values ($1)
+	SetBlockRefresh(ctx context.Context, refreshHash *string) error
+	//SetRefreshHash
+	//
+	//  update users
+	//  set refresh_hash = $1,
+	//  expired_at = $2
+	//  where user_login = $3
+	SetRefreshHash(ctx context.Context, arg SetRefreshHashParams) error
 }
 
 var _ Querier = (*Queries)(nil)

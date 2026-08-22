@@ -8,6 +8,10 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type BlacklistRefresh struct {
+	RefreshHash string `db:"refresh_hash"`
+}
+
 type User struct {
 	UserLogin    string           `db:"user_login"`
 	Uuid         string           `db:"uuid"`
@@ -16,4 +20,6 @@ type User struct {
 	Confirmed    *bool            `db:"confirmed"`
 	CreatedAt    pgtype.Timestamp `db:"created_at"`
 	LastSignUpAt pgtype.Timestamp `db:"last_sign_up_at"`
+	RefreshHash  *string          `db:"refresh_hash"`
+	ExpiredAt    pgtype.Timestamp `db:"expired_at"`
 }
