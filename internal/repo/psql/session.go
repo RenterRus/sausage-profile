@@ -43,7 +43,7 @@ func (u *UserRepo) SetRefreshHash(ctx context.Context, arg entity.SetRefreshHash
 		Login:       arg.Login,
 		ExpiredAt:   arg.ExpiredAt,
 	}); err != nil {
-		return fmt.Errorf("SetBlockRefresh.SetBlockRefresh: %w", err)
+		return fmt.Errorf("SetRefreshHash.SetRefreshHash: %w", err)
 	}
 
 	return nil
