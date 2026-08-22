@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/RenterRus/sausage-profile/internal/entity"
-	"github.com/RenterRus/sausage-profile/internal/repo/otp"
 	"github.com/RenterRus/sausage-profile/internal/repo/psql"
+	"github.com/RenterRus/sausage-profile/internal/usecase/otp"
 )
 
 type register struct {

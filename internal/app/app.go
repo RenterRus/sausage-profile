@@ -7,9 +7,9 @@ import (
 
 	v1 "github.com/RenterRus/sausage-profile/docs/proto/v1"
 	protoServe "github.com/RenterRus/sausage-profile/internal/controller/grpc"
-	"github.com/RenterRus/sausage-profile/internal/repo/otp"
 	"github.com/RenterRus/sausage-profile/internal/repo/psql"
 	"github.com/RenterRus/sausage-profile/internal/usecase"
+	"github.com/RenterRus/sausage-profile/internal/usecase/otp"
 	"github.com/sourcegraph/conc/pool"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
